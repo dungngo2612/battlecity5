@@ -1,0 +1,44 @@
+# depslib dependency file v1.0
+1743170272 source:e:\ltnc2024\game\battlecity5\tank.cpp
+	"Tank.h"
+	<iostream>
+	<cstdlib>
+	<ctime>
+
+1743134366 e:\ltnc2024\game\battlecity5\tank.h
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_mixer.h>
+	<vector>
+	<algorithm>
+	"Map.h"
+	"Bullet.h"
+
+1743100707 e:\ltnc2024\game\battlecity5\map.h
+	<SDL.h>
+	<algorithm>
+
+1743099558 e:\ltnc2024\game\battlecity5\bullet.h
+	<SDL.h>
+	"Map.h"
+
+1743099558 source:e:\ltnc2024\game\battlecity5\main.cpp
+	"Game.h"
+
+1743134154 e:\ltnc2024\game\battlecity5\game.h
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_mixer.h>
+	"Map.h"
+	"Tank.h"
+	"Menu.h"
+
+1743103910 e:\ltnc2024\game\battlecity5\menu.h
+	<SDL.h>
+	<SDL_image.h>
+	<iostream>
+
+1743170609 source:e:\ltnc2024\game\battlecity5\game.cpp
+	"Game.h"
+	<iostream>
+
