@@ -1,3 +1,4 @@
+// file game.cpp
 #include "Game.h"
 #include <iostream>
 
@@ -18,7 +19,7 @@ Game::Game() {
         return;
     }
 
-    if (Mix_Init(MIX_INIT_MP3 | MIX_INIT_OGG) == 0) {
+    if (Mix_Init(MIX_INIT_MP3 ) == 0) {
         cerr << "SDL_mixer could not initialize! Mix_Error: " << Mix_GetError() << endl;
         running = false;
         IMG_Quit();
@@ -55,9 +56,10 @@ Game::Game() {
         return;
     }
 
-    playerTank1 = new Tank(0, 0, SDL_Color{0, 255, 0, 255}, renderer, true);
-    if (!playerTank1) {
-        cerr << "Failed to allocate memory for playerTank1!" << endl;
+    // Khởi tạo map sau khi renderer đã được tạo
+    map = new Map(renderer);
+    if (!map) {
+        cerr << "Failed to allocate memory for map!" << endl;
         running = false;
         SDL_DestroyRenderer(renderer);
         SDL_DestroyWindow(window);
@@ -66,10 +68,24 @@ Game::Game() {
         SDL_Quit();
         return;
     }
-    playerTank2 = new Tank(800, 800, SDL_Color{255, 0, 0, 255}, renderer, false);
+
+    playerTank1 = new Tank(0, 0, SDL_Color{0, 255, 0, 255}, renderer, true);
+    if (!playerTank1) {
+        cerr << "Failed to allocate memory for playerTank1!" << endl;
+        running = false;
+        delete map;  // Giải phóng map
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        Mix_Quit();
+        IMG_Quit();
+        SDL_Quit();
+        return;
+    }
+    playerTank2 = new Tank(800, 600, SDL_Color{255, 0, 0, 255}, renderer, false);
     if (!playerTank2) {
         cerr << "Failed to allocate memory for playerTank2!" << endl;
         delete playerTank1;
+        delete map;  // Giải phóng map
         running = false;
         SDL_DestroyRenderer(renderer);
         SDL_DestroyWindow(window);
@@ -147,7 +163,7 @@ Game::Game() {
             cerr << "Failed to create texture from hp_item.png! SDL_Error: " << SDL_GetError() << endl;
         }
     }
-    hpItemRect = { 0, 0, 50, 50 };
+    hpItemRect = { 0, 0, 20, 20 };
     hpItemActive = false;
 
     createGameOverMenu();
@@ -157,6 +173,7 @@ Game::Game() {
 Game::~Game() {
     delete playerTank1;
     delete playerTank2;
+    delete map;  // Giải phóng map
     if (gameMusic) {
         Mix_FreeMusic(gameMusic);
         gameMusic = nullptr;
@@ -219,7 +236,7 @@ void Game::render() {
     SDL_SetRenderDrawColor(renderer, 128, 128, 128, 255);
     SDL_RenderClear(renderer);
 
-    map.draw(renderer);
+    map->draw(renderer);  // Sửa thành map->draw
     if (playerTank1->isAlive()) playerTank1->draw(renderer);
     if (playerTank2->isAlive()) playerTank2->draw(renderer);
 
@@ -367,7 +384,7 @@ void Game::resetGame() {
     playerTank1 = new Tank(800, 0, SDL_Color{0, 255, 0, 255}, renderer, true);
     playerTank2 = new Tank(0, 800, SDL_Color{255, 0, 0, 255}, renderer, false);
     playerTank2->setAI(!isTwoPlayerMode);
-    map = Map();
+    map->reset();  // Sửa thành map->reset()
     hpItemActive = false;
     lastHpItemSpawnTime = 0;
 }
@@ -425,7 +442,7 @@ void Game::spawnHpItem() {
         hpItemRect.x = rand() % (SCREEN_WIDTH - hpItemRect.w);
         hpItemRect.y = rand() % (SCREEN_HEIGHT - hpItemRect.h);
 
-        while (map.isColliding(hpItemRect)) {
+        while (map->isColliding(hpItemRect)) {  // Sửa thành map->
             hpItemRect.x = rand() % (SCREEN_WIDTH - hpItemRect.w);
             hpItemRect.y = rand() % (SCREEN_HEIGHT - hpItemRect.h);
         }
@@ -470,10 +487,10 @@ void Game::runGame() {
                 running = false;
             }
             if (playerTank1->isAlive()) {
-                playerTank1->handleInput(event, map, true, shootSound);
+                playerTank1->handleInput(event, *map, true, shootSound);  // Sửa thành *map
             }
             if (playerTank2->isAlive() && isTwoPlayerMode) {
-                playerTank2->handleInput(event, map, false, shootSound);
+                playerTank2->handleInput(event, *map, false, shootSound);  // Sửa thành *map
             }
         }
 
@@ -488,13 +505,13 @@ void Game::runGame() {
         }
 
         if (playerTank1->isAlive()) {
-            playerTank1->update(map, *playerTank2);
+            playerTank1->update(*map, *playerTank2);  // Sửa thành *map
         }
         if (playerTank2->isAlive()) {
             if (!isTwoPlayerMode) {
-                playerTank2->handleAI(map, *playerTank1, shootSound);
+                playerTank2->handleAI(*map, *playerTank1, shootSound);  // Sửa thành *map
             }
-            playerTank2->update(map, *playerTank1);
+            playerTank2->update(*map, *playerTank1);  // Sửa thành *map
         }
 
         checkBulletCollisions();
