@@ -1,4 +1,4 @@
-// Menu.h
+// file Menu.h
 #ifndef MENU_H
 #define MENU_H
 
@@ -11,26 +11,26 @@ class Menu {
 private:
     SDL_Renderer* renderer;
     int selectedOption;
-    SDL_Texture* startButtonTexture = nullptr;
-    SDL_Texture* exitButtonTexture = nullptr;
+    SDL_Texture* startTexture = nullptr;
+    SDL_Texture* exitTexture = nullptr;
     SDL_Texture* backgroundTexture = nullptr;
 
 public:
-    Menu(SDL_Renderer* renderer) : renderer(renderer), selectedOption(0) {
-        SDL_Surface* startButtonSurface = IMG_Load("start_button.png");
-        if (startButtonSurface) {
-            startButtonTexture = SDL_CreateTextureFromSurface(renderer, startButtonSurface);
-            SDL_FreeSurface(startButtonSurface);
+    Menu(SDL_Renderer* renderer) : renderer(renderer), selectedOption() {
+        SDL_Surface* startSurface = IMG_Load("start_button.png");
+        if (startSurface) {
+            startTexture = SDL_CreateTextureFromSurface(renderer, startSurface);
+            SDL_FreeSurface(startSurface);
         } else {
-            std::cerr << "Failed to load start_button.png! IMG_Error: " << IMG_GetError() << std::endl;
+            cerr << "Failed to load start_button.png! IMG_Error: " << IMG_GetError() << endl;
         }
 
-        SDL_Surface* exitButtonSurface = IMG_Load("exit_button.jpg");
-        if (exitButtonSurface) {
-            exitButtonTexture = SDL_CreateTextureFromSurface(renderer, exitButtonSurface);
-            SDL_FreeSurface(exitButtonSurface);
+        SDL_Surface* exitSurface = IMG_Load("exit_button.jpg");
+        if (exitSurface) {
+            exitTexture = SDL_CreateTextureFromSurface(renderer, exitSurface);
+            SDL_FreeSurface(exitSurface);
         } else {
-            std::cerr << "Failed to load exit_button.jpg! IMG_Error: " << IMG_GetError() << std::endl;
+            cerr << "Failed to load exit_button.jpg! IMG_Error: " << IMG_GetError() << endl;
         }
 
         SDL_Surface* backgroundSurface = IMG_Load("background.jpg");
@@ -38,18 +38,18 @@ public:
             backgroundTexture = SDL_CreateTextureFromSurface(renderer, backgroundSurface);
             SDL_FreeSurface(backgroundSurface);
         } else {
-            std::cerr << "Failed to load background.jpg! IMG_Error: " << IMG_GetError() << std::endl;
+            cerr << "Failed to load background.jpg! IMG_Error: " << IMG_GetError() << endl;
         }
     }
 
     ~Menu() {
-        if (startButtonTexture) {
-            SDL_DestroyTexture(startButtonTexture);
-            startButtonTexture = nullptr;
+        if (startTexture) {
+            SDL_DestroyTexture(startTexture);
+            startTexture = nullptr;
         }
-        if (exitButtonTexture) {
-            SDL_DestroyTexture(exitButtonTexture);
-            exitButtonTexture = nullptr;
+        if (exitTexture) {
+            SDL_DestroyTexture(exitTexture);
+            exitTexture = nullptr;
         }
         if (backgroundTexture) {
             SDL_DestroyTexture(backgroundTexture);
@@ -87,20 +87,20 @@ public:
             SDL_RenderCopy(renderer, backgroundTexture, nullptr, nullptr);
         }
 
-        if (startButtonTexture) {
+        if (startTexture) {
             int textW, textH;
-            SDL_QueryTexture(startButtonTexture, nullptr, nullptr, &textW, &textH);
+            SDL_QueryTexture(startTexture, nullptr, nullptr, &textW, &textH);
             SDL_Rect startButtonRect = { (800 - 200) / 2, 200, 200, 50 };
-            SDL_SetTextureColorMod(startButtonTexture, selectedOption == 0 ? 255 : 128, 255, 255);
-            SDL_RenderCopy(renderer, startButtonTexture, nullptr, &startButtonRect);
+            SDL_SetTextureColorMod(startTexture, selectedOption == 0 ? 255 : 128, 255, 255);
+            SDL_RenderCopy(renderer, startTexture, nullptr, &startButtonRect);
         }
 
-        if (exitButtonTexture) {
+        if (exitTexture) {
             int textW, textH;
-            SDL_QueryTexture(exitButtonTexture, nullptr, nullptr, &textW, &textH);
-            SDL_Rect exitButtonRect = { (800 - 200) / 2, 300, 200, 50 };
-            SDL_SetTextureColorMod(exitButtonTexture, selectedOption == 1 ? 255 : 128, 255, 255);
-            SDL_RenderCopy(renderer, exitButtonTexture, nullptr, &exitButtonRect);
+            SDL_QueryTexture(exitTexture, nullptr, nullptr, &textW, &textH);
+            SDL_Rect exitRect = { (800 - 200) / 2, 300, 200, 50 };
+            SDL_SetTextureColorMod(exitTexture, selectedOption == 1 ? 255 : 128, 255, 255);
+            SDL_RenderCopy(renderer, exitTexture, nullptr, &exitRect);
         }
 
         SDL_RenderPresent(renderer);
