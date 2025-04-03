@@ -1,4 +1,3 @@
-// Tank.h
 #ifndef TANK_H
 #define TANK_H
 
@@ -37,12 +36,12 @@ public:
     void drawHealthBar(SDL_Renderer* renderer);
     SDL_Rect getRect() const;
     std::vector<Bullet>& getBullets();
-    int getHP() const;              // Đã có sẵn
-    void takeDamage();              // Đã có sẵn
-    bool isAlive() const;           // Đã có sẵn
-    void setAI(bool value);         // Đã có sẵn
-    void increaseHP();              // Thêm hàm để tăng HP
-    int getMaxHP() const;           // Thêm hàm để lấy MAX_HP
+    int getHP() const;
+    void takeDamage();
+    bool isAlive() const;
+    void setAI(bool value);
+    void increaseHP();
+    int getMaxHP() const;
 };
 
 #endif
