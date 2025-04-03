@@ -99,7 +99,7 @@ Game::Game() {
         return;
     }
 
-    playerTank2 = new Tank(800, 600, SDL_Color{255, 0, 0, 255}, renderer, false);
+    playerTank2 = new Tank(750, 570, SDL_Color{255, 0, 0, 255}, renderer, false);
     if (!playerTank2) {
         cerr << "Failed to allocate memory for playerTank2!" << endl;
         delete playerTank1;
@@ -537,8 +537,8 @@ void Game::resetGame() {
     enemyTanks.clear();
 
     // Tạo lại xe tăng người chơi
-    playerTank1 = new Tank(800, 0, SDL_Color{0, 255, 0, 255}, renderer, true);
-    playerTank2 = new Tank(0, 800, SDL_Color{255, 0, 0, 255}, renderer, false);
+    playerTank1 = new Tank(750, 0, SDL_Color{0, 255, 0, 255}, renderer, true);
+    playerTank2 = new Tank(0, 570, SDL_Color{255, 0, 0, 255}, renderer, false);
     playerTank2->setAI(!isTwoPlayerMode);
 
     // Sinh lại xe tăng địch
